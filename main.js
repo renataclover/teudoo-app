@@ -1,12 +1,18 @@
+const path = require('path')
 const { app, BrowserWindow } = require('electron')
 
 const createWindow = () => {
-    const win = new BrowserWindow({
+    const mainWindow = new BrowserWindow({
       width: 800,
-      height: 600
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+      },
     })
   
-    win.loadFile('index.html')
+    mainWindow.loadFile('index.html')
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
@@ -21,5 +27,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
-
-// Re-create the app when the dock icon is clicked (MacOS)
